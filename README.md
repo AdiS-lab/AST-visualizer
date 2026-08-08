@@ -1,1 +1,1 @@
-Compiling my interpreter and visualizing it
+This is a continuation of my previous work that can be found in this repository. I visualize the creation of an AST using a torus donut program, compile it to WASM, and render everything in a web browser.
