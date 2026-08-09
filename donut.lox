@@ -91,17 +91,16 @@ fun asciiDonut(){
             } 
         } // end of creating circle = 2d arr should be created
 
-
-        clear();
+        var a = "";
+        //clear();
         for (var y = 0; y < SCREEN_HEIGHT; y = y + 1) {
             for (var x = 0; x < SCREEN_WIDTH; x = x + 1){
-                write(outputArr[y][x]);
+                a = a + outputArr[y][x];
             }
-            flush();
-            print "";
+            write(a)
         }
-        print clock();
-        sleep(33);
+        //write clock();
+        //sleep(33);
     }
 }
 

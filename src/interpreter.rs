@@ -1,8 +1,9 @@
 use crate::helpers::{parse_number,parse_string, unwrap_lit_ref_cell, wrap_lit_ref_cell};
 use crate::statements::{execute_stmt, new_scope};
 use crate::types::{Arr, Env, ErrorHandler, Expr, Lit, Val, default};
-use std::time::{SystemTime, UNIX_EPOCH};
+use crate::{write};
 
+use std::time::{SystemTime, UNIX_EPOCH};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -249,7 +250,8 @@ impl Interpreter {
                         }
                         "write" => {
                             let s: Lit = self.evaluate(args.get(0).unwrap().clone())?;
-                            print!("{}", parse_string(s)?);
+                            write(parse_string(s)?);
+                            // print!("{}", parse_string(s)?);
                             return Ok(Lit::Nil);
                         }
                         "flush" => {

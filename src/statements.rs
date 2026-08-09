@@ -1,5 +1,6 @@
 use crate::Interpreter;
 use crate::types::*;
+use crate::{log};
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -25,7 +26,8 @@ pub fn execute_stmt(stmt: Stmt, interpreter: &mut Interpreter) -> Result<Lit, Er
     match stmt{
         Stmt::Print(expr) => {
             let val: Lit = interpreter.evaluate(expr)?;
-            println!("{}", val);
+            log(&format!("{}", val));
+            // println!("{}", val);
             return Ok(Lit::Nil)
         },
 

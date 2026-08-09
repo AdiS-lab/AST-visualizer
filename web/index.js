@@ -1,7 +1,19 @@
- import init, { greet } from "../pkg/ast_visualizer.js";
+import init, { greet, command } from "../pkg/ast_visualizer.js";
+
+const outputSpace = document.getElementById("output-space")
+const submitButton = document.getElementById("submit-button") 
+const commandInput = document.getElementById("command-input")
+const fileContents = document.getElementById("file-contents")
+
+window.write = (s) => {
+    outputSpace.innerHTML = s;
+}
 
 init().then(() => {
     greet("WebAssembly");
 });
 
-const triggerDonut = getElementById("donut");
+submitButton.addEventListener("click", ()=>{
+    command(commandInput.value, fileContents.value);
+    commandInput.textContent = ""
+})
