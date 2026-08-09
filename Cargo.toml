@@ -1,8 +1,15 @@
 [package]
 name = "ast-visualizer"
 version = "0.1.0"
-authors = ["Adi"]
+authors = ["Adi <adishankar219@gmail.com>"]
+description = "A sample project with wasm-pack"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/AdiS-lab/AST-visualizer" 
 edition = "2024"
 rust-version = "1.96"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
+wasm-bindgen = "0.2"
