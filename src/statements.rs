@@ -1,6 +1,6 @@
 use crate::Interpreter;
 use crate::types::*;
-use crate::{log};
+use crate::{write_to_screen, log};
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -26,8 +26,8 @@ pub fn execute_stmt(stmt: Stmt, interpreter: &mut Interpreter) -> Result<Lit, Er
     match stmt{
         Stmt::Print(expr) => {
             let val: Lit = interpreter.evaluate(expr)?;
-            log(&format!("{}", val));
-            // println!("{}", val);
+            log("[PRINT STATEMENT BELOW]");
+            write_to_screen(format!("{}\n", val));
             return Ok(Lit::Nil)
         },
 
@@ -113,9 +113,7 @@ pub fn execute_stmt(stmt: Stmt, interpreter: &mut Interpreter) -> Result<Lit, Er
                 loop_condition = interpreter.evaluate(conditional.clone())?;
             }
             return Ok(Lit::Nil) 
-        },
-
-        _ => Ok(Lit::Nil)
+        }
     }
 }
 

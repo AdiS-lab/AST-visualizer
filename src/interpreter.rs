@@ -1,7 +1,7 @@
 use crate::helpers::{parse_number,parse_string, unwrap_lit_ref_cell, wrap_lit_ref_cell};
 use crate::statements::{execute_stmt, new_scope};
 use crate::types::{Arr, Env, ErrorHandler, Expr, Lit, Val, default};
-use crate::{write};
+use crate::{write_to_screen, clear_all};
 
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::cell::RefCell;
@@ -146,7 +146,7 @@ impl Interpreter {
             }
 
             Expr::AssignArr(arr_expr, value) => {
-                let replace_val = self.evaluate(*value)?;
+                let replace_val: Lit = self.evaluate(*value)?;
                 match self.evaluate_place(*arr_expr) {
                     Ok(val_to_replace) => {
                         *val_to_replace.borrow_mut() = replace_val;
@@ -250,12 +250,15 @@ impl Interpreter {
                         }
                         "write" => {
                             let s: Lit = self.evaluate(args.get(0).unwrap().clone())?;
-                            write(parse_string(s)?);
+                            write_to_screen(parse_string(s)?);
                             // print!("{}", parse_string(s)?);
                             return Ok(Lit::Nil);
                         }
                         "flush" => {
                             io::stdout().flush().ok();
+                            return Ok(Lit::Nil)
+                        } "clear" =>{
+                            clear_all();
                             return Ok(Lit::Nil)
                         }
                         _ => {
@@ -376,7 +379,7 @@ impl Interpreter {
 
     pub fn new() -> Interpreter {
         let mut scope: HashMap<String, Rc<RefCell<Lit>>> = HashMap::new();
-        let names = vec!["clock", "cos", "sin", "clear", "sleep", "floor", "write", "flush"].into_iter();
+        let names = vec!["clock", "cos", "sin", "clear", "sleep", "floor", "write", "flush", "clear"].into_iter();
         for name in names {
             let v = Rc::new(RefCell::new(Lit::NativeFn(name.to_string())));
             scope.insert(name.to_string(), v);

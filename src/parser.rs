@@ -407,27 +407,27 @@ impl Parser {
     }
 }
 
-pub fn parse(val: Expr) -> String {
-    match val {
-        Expr::Literal(lit) => {
-            if let Lit::F64(f) = lit {
-                return format!("{:?}", f);
-            } else if let Lit::String(s) = lit {
-                return format!("{}", s);
-            } else if let Lit::Bool(b) = lit {
-                return format!("{}", b);
-            } else if let Lit::Nil = lit {
-                return "nil".to_string();
-            }
-        }
-        Expr::Binary(l, o, r) => return format!("({} {} {})", o, parse(*l), parse(*r)),
-        Expr::Unary(l, r) => return format!("({} {})", l, parse(*r)),
-        Expr::Grouping(l) => return format!("(group {})", parse(*l)),
-        Expr::AssignVar(s, expr) => return format!("({}{})", s, parse(*expr)),
-        Expr::AssignArr(val, right) => return format!("{:?} {:?}", parse(*val), parse(*right)),
-        Expr::Operand(l, o, r) => return format!("({} {} {})", o, parse(*l), parse(*r)),
-        Expr::Call(id, args) => return format!("({:?} {:?})", parse(*id), args),
-        Expr::Arr(id, index) => return format!("{:?} {}", parse(*id), parse(*index)),
-    };
-    return "".to_string();
-}
+// pub fn parse(val: Expr) -> String {
+//     match val {
+//         Expr::Literal(lit) => {
+//             if let Lit::F64(f) = lit {
+//                 return format!("{:?}", f);
+//             } else if let Lit::String(s) = lit {
+//                 return format!("{}", s);
+//             } else if let Lit::Bool(b) = lit {
+//                 return format!("{}", b);
+//             } else if let Lit::Nil = lit {
+//                 return "nil".to_string();
+//             }
+//         }
+//         Expr::Binary(l, o, r) => return format!("({} {} {})", o, parse(*l), parse(*r)),
+//         Expr::Unary(l, r) => return format!("({} {})", l, parse(*r)),
+//         Expr::Grouping(l) => return format!("(group {})", parse(*l)),
+//         Expr::AssignVar(s, expr) => return format!("({}{})", s, parse(*expr)),
+//         Expr::AssignArr(val, right) => return format!("{:?} {:?}", parse(*val), parse(*right)),
+//         Expr::Operand(l, o, r) => return format!("({} {} {})", o, parse(*l), parse(*r)),
+//         Expr::Call(id, args) => return format!("({:?} {:?})", parse(*id), args),
+//         Expr::Arr(id, index) => return format!("{:?} {}", parse(*id), parse(*index)),
+//     };
+//     return "".to_string();
+// }

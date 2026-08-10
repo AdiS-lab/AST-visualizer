@@ -98,6 +98,7 @@ fun asciiDonut(){
                 a = a + outputArr[y][x];
             }
             write(a)
+            write("\n")
         }
         //write clock();
         //sleep(33);

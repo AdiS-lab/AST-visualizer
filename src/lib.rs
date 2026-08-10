@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use std::fs;
+use serde_json::json;
 
 mod helpers;
 mod interpreter;
@@ -9,13 +9,15 @@ mod tokenizer;
 mod types;
 
 use interpreter::Interpreter;
-use parser::{Parser, parse};
+use parser::{Parser};
 use statements::execute;
 use tokenizer::tokenize;
 
 #[wasm_bindgen]
 extern "C" {
-    fn write(S: String);
+    fn write_to_screen(S: String);
+    fn clear_all();
+    fn throw_error(s: &str);
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
@@ -30,75 +32,14 @@ pub fn greet(name: &str) {
 }
 
 #[wasm_bindgen] 
-pub fn command(terminal_line: String, file_contents: String){
-    log(&format!("{}", terminal_line));
-
-  let args: Vec<&str> = terminal_line.split(" ").collect();
-  
+pub fn command(terminal_line: String, file_contents: String) -> String{
+    let args: Vec<&str> = terminal_line.split(" ").collect();
     let command = args[0];
-    log(&format!("these are file contents {}", file_contents));
-
+    
     match command {
-        "tokenize" => {
-            let (tokens, err) = tokenize(file_contents);
-            for token in &tokens {
-                println!("{}", token)
-            }
-
-            if !err.is_empty() {
-                for err_message in err {
-                    eprintln!("{}", err_message)
-                }
-                error("65");
-            };
-
-            error("65");
-        }
-        "parse" => {
-            let (tokens, _) = tokenize(file_contents);
-            if tokens.len() == 1 {
-                error("65");
-            }
-
-            let mut parser: Parser = Parser {
-                tokens,
-                curr_pos: 0,
-            };
-            match parser.equality() {
-                Ok(tree) => {
-                    let ast_tree: String = parse(tree);
-                    println!("{}", ast_tree);
-                }
-                Err(e) => {
-                    eprintln!("{}", e);
-                    error("65");
-                }
-            };
-            log("0");
-        }
-        "evaluate" => {
-            let (tokens, _) = tokenize(file_contents);
-            let mut parser = Parser {
-                tokens,
-                curr_pos: 0,
-            };
-            match parser.equality() {
-                Ok(tree) => {
-                    let mut interpreter: Interpreter = Interpreter::new();
-                    match interpreter.evaluate(tree) {
-                        Ok(ast_tree) => println!("{}", ast_tree),
-                        Err(e) => {
-                            eprintln!("{}", e);
-                            error("70");
-                        }
-                    };
-                }
-                Err(e) => {
-                    eprintln!("{}", e);
-                    error("65");
-                }
-            };
-            error("0");
+        "clear" =>{
+            clear_all();
+            return json!({"message": "cleared"}).to_string()
         }
         "run" => {
             let (tokens, _) = tokenize(file_contents);
@@ -111,23 +52,15 @@ pub fn command(terminal_line: String, file_contents: String){
                     let mut interpreter: Interpreter = Interpreter::new();
                     match execute(tree, &mut interpreter) {
                         Ok(_) => {}
-                        Err(e) => {
-                            eprintln!("{}", e);
-                            error("70");
-                        }
+                        Err(e) => return json!({"error_message": format!("{}", e), "exit_code": 70}).to_string()
                     }
                 }
-
-                Err(e) => {
-                    eprintln!("{}", e);
-                    error("65");
-                }
+                Err(e) => return json!({"error_message": format!("{}", e), "exit_code": 65}).to_string()
             };
-            log("0");
+            return json!({"message": "success!".to_string(), "exit_code": 0}).to_string();
         }
         _ => {
-            eprintln!("Unknown command: {}", command);
-            error("1");
+            return json!({"error_message": format!("[ERROR]: Unknown command"), "exit_code": 1}).to_string()
         }
     }
 }

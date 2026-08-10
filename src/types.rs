@@ -103,10 +103,11 @@ impl std::fmt::Display for Lit {
             Lit::NativeFn(s) => write!(f, "<fn {}>", s),
             Lit::Return(e) => write!(f, "{:?}", e),
             Lit::Arr(v) => {
+                let mut output = String::new();
                 for i in v{
-                    println!("{}", i.borrow().clone());
+                    output += &format!("{}", i.borrow().clone());
                 }
-                return write!(f, "");
+                return write!(f, "{}", output);
             }
         }
     }
