@@ -3,7 +3,6 @@ import { AstCanvas } from "../components/AstCanvas";
 import { FileView } from "../components/FileView";
 import { Terminal } from "../components/Terminal";
 import { Panel, Tab, ExternalLink } from "../ui";
-import quill from "../../public/quill.jpg";
 
 type RightTab = "ast" | "file";
 
@@ -72,7 +71,6 @@ export function Ast() {
           </div>
           <div className="flex flex-1 pt-4 overflow-hidden text-center justify-center items-center" style={{ fontFamily: "'Source Serif 4', serif" }}>
             WRITING BELOW
-            <img className = "h-50 w-50" src = {quill}></img>
           </div>
 
         </Panel>
