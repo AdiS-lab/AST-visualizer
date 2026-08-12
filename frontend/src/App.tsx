@@ -1,7 +1,16 @@
-import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navbar } from "./components/Navbar";
+import { Home } from "./pages/Home";
+import { Ast } from "./pages/Ast";
 
-const App = () => {
-  return <Home />;
-};
-
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ast" element={<Ast />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

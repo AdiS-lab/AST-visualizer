@@ -16,8 +16,9 @@ use tokenizer::tokenize;
 #[wasm_bindgen]
 extern "C" {
     fn write_to_screen(S: String);
-    fn clear_all();
-    fn throw_error(s: &str);
+    fn clear_screen();
+    fn draw_node(x: i32, y: i32, label: &str);
+    fn clear_canvas();
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
@@ -35,10 +36,11 @@ pub fn greet(name: &str) {
 pub fn command(terminal_line: String, file_contents: String) -> String{
     let args: Vec<&str> = terminal_line.split(" ").collect();
     let command = args[0];
+    // log(&format!("this is command inside rust {}", command));
     
     match command {
         "clear" =>{
-            clear_all();
+            clear_screen();
             return json!({"message": "cleared"}).to_string()
         }
         "run" => {
@@ -60,7 +62,7 @@ pub fn command(terminal_line: String, file_contents: String) -> String{
             return json!({"message": "success!".to_string(), "exit_code": 0}).to_string();
         }
         _ => {
-            return json!({"error_message": format!("[ERROR]: Unknown command"), "exit_code": 1}).to_string()
+            return json!({"error_message": format!("[ERROR]: Unknown command: {}", command), "exit_code": 1}).to_string()
         }
     }
 }

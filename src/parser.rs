@@ -1,4 +1,6 @@
 use crate::types::*;
+use crate::{draw_node, log};
+
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -407,27 +409,59 @@ impl Parser {
     }
 }
 
-// pub fn parse(val: Expr) -> String {
-//     match val {
-//         Expr::Literal(lit) => {
-//             if let Lit::F64(f) = lit {
-//                 return format!("{:?}", f);
-//             } else if let Lit::String(s) = lit {
-//                 return format!("{}", s);
-//             } else if let Lit::Bool(b) = lit {
-//                 return format!("{}", b);
-//             } else if let Lit::Nil = lit {
-//                 return "nil".to_string();
-//             }
-//         }
-//         Expr::Binary(l, o, r) => return format!("({} {} {})", o, parse(*l), parse(*r)),
-//         Expr::Unary(l, r) => return format!("({} {})", l, parse(*r)),
-//         Expr::Grouping(l) => return format!("(group {})", parse(*l)),
-//         Expr::AssignVar(s, expr) => return format!("({}{})", s, parse(*expr)),
-//         Expr::AssignArr(val, right) => return format!("{:?} {:?}", parse(*val), parse(*right)),
-//         Expr::Operand(l, o, r) => return format!("({} {} {})", o, parse(*l), parse(*r)),
-//         Expr::Call(id, args) => return format!("({:?} {:?})", parse(*id), args),
-//         Expr::Arr(id, index) => return format!("{:?} {}", parse(*id), parse(*index)),
-//     };
-//     return "".to_string();
-// }
+
+pub fn parse(val: Expr, x: i32, y: i32)  -> String {
+    const X_DIST: i32= 2;
+    const Y_DIST: i32 = 3;
+    log("made it inside parse great!");
+    
+    match val {
+        Expr::Literal(lit) => {
+            draw_node(x, y, "literal");
+            log("drew literal, if not working then is a problem with func or state");
+            
+            if let Lit::F64(f) = lit {
+                return format!("{:?}", f);
+            } else if let Lit::String(s) = lit {
+                return format!("{}", s);
+            } else if let Lit::Bool(b) = lit {
+                return format!("{}", b);
+            } else if let Lit::Nil = lit {
+                return "nil".to_string();
+            }
+        }
+        Expr::Binary(l, o, r) => {
+            draw_node(x, y, "binary");
+            return format!("({} {} {})", o, parse(*l, x-X_DIST, y-Y_DIST), parse(*r, x+X_DIST, y-Y_DIST))
+        },
+        Expr::Unary(l, r) => {
+            draw_node(x, y, "unary");
+            return format!("({} {})", l, parse(*r, x, y-Y_DIST))
+        },
+        Expr::Grouping(l) => {
+            draw_node(x, y, "grouping");
+            return format!("(group {})", parse(*l, x, y-Y_DIST))
+        },
+        Expr::AssignVar(s, expr) => {
+            draw_node(x, y, "assignvar");
+            return format!("({}{})", s, parse(*expr, x, y-Y_DIST))
+        },
+        Expr::AssignArr(val, right) => {
+            draw_node(x, y, "assignarr");
+            return format!("{:?} {:?}", parse(*val, x, y -Y_DIST), parse(*right, x, y - Y_DIST*2))
+        },
+        Expr::Operand(l, o, r) => {
+            draw_node(x, y, "operand");
+            return format!("({} {} {})", o, parse(*l, x-X_DIST, y-Y_DIST), parse(*r, x+X_DIST, y-Y_DIST))
+        },
+        Expr::Call(id, args) => {
+            draw_node(x, y, "call");
+            return format!("({:?} {:?})", parse(*id, x, y-Y_DIST ), args)
+        },
+        Expr::Arr(id, index) =>{
+            draw_node(x, y, "arr");
+            return format!("{} {}", parse(*id, x, y -Y_DIST), parse(*index,  x, y - Y_DIST*2))
+        },
+    };
+    return "".to_string();
+}

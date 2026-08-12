@@ -1,6 +1,6 @@
 use crate::Interpreter;
 use crate::types::*;
-use crate::{write_to_screen, log};
+use crate::{write_to_screen };
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -26,7 +26,7 @@ pub fn execute_stmt(stmt: Stmt, interpreter: &mut Interpreter) -> Result<Lit, Er
     match stmt{
         Stmt::Print(expr) => {
             let val: Lit = interpreter.evaluate(expr)?;
-            log("[PRINT STATEMENT BELOW]");
+            // log("[PRINT STATEMENT BELOW]");
             write_to_screen(format!("{}\n", val));
             return Ok(Lit::Nil)
         },

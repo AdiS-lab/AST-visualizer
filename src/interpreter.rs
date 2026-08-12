@@ -1,8 +1,9 @@
 use crate::helpers::{parse_number,parse_string, unwrap_lit_ref_cell, wrap_lit_ref_cell};
 use crate::statements::{execute_stmt, new_scope};
 use crate::types::{Arr, Env, ErrorHandler, Expr, Lit, Val, default};
-use crate::{write_to_screen, clear_all};
-
+use crate::parser::{parse};
+use crate::{write_to_screen, clear_screen};
+ 
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -15,6 +16,9 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn evaluate(&mut self, expr: Expr) -> Result<Lit, ErrorHandler> {
+        // log("made it inside interpreter");
+        parse(expr.clone(), 100, 100);
+
         match expr {
             Expr::Literal(lit) => {
                 if let Lit::Id(s) = lit {
@@ -257,8 +261,9 @@ impl Interpreter {
                         "flush" => {
                             io::stdout().flush().ok();
                             return Ok(Lit::Nil)
-                        } "clear" =>{
-                            clear_all();
+                        }
+                        "clear_screen" => {
+                            clear_screen();
                             return Ok(Lit::Nil)
                         }
                         _ => {
@@ -379,7 +384,7 @@ impl Interpreter {
 
     pub fn new() -> Interpreter {
         let mut scope: HashMap<String, Rc<RefCell<Lit>>> = HashMap::new();
-        let names = vec!["clock", "cos", "sin", "clear", "sleep", "floor", "write", "flush", "clear"].into_iter();
+        let names = vec!["clock", "cos", "sin", "clear", "sleep", "floor", "write", "flush", "clear", "clear_screen"].into_iter();
         for name in names {
             let v = Rc::new(RefCell::new(Lit::NativeFn(name.to_string())));
             scope.insert(name.to_string(), v);
