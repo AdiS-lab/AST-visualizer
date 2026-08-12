@@ -1,5 +1,5 @@
 use crate::types::*;
-use crate::{draw_node, draw_line, log};
+use crate::{draw_node, draw_line};
 
 use std::cell::RefCell;
 use std::rc::Rc;
