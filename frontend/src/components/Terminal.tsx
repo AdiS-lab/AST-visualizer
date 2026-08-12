@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
+import { FitAddon } from "@xterm/addon-fit";
 import init, { greet } from "../../../pkg/ast_visualizer.js";
 import { commandManager } from "../managers/command-manager.js";
 import { terminalManager } from "../managers/terminal-manager.js";
@@ -59,6 +60,9 @@ export function Terminal() {
       },
     });
 
+    const fitAddon = new FitAddon();
+    term.loadAddon(fitAddon);
+
     terminalManager.attach(term);
 
     init().then(() => {
@@ -66,16 +70,33 @@ export function Terminal() {
     });
 
     term.open(containerRef.current);
+    fitAddon.fit();
+
+    term.writeln("\x1b[36mCommands:\x1b[0m");
+    term.writeln("  \x1b[33mrun\x1b[0m                  Run the current file");
+    term.writeln("  \x1b[33manimate donut.lox\x1b[0m    Load the donut animation");
+    term.writeln("  \x1b[33mclear\x1b[0m                Clear the terminal");
+    term.writeln("  \x1b[33mCtrl+C\x1b[0m               Stop current animation");
+    term.writeln("");
     term.write("$ ");
     termRef.current = term;
 
     readCommand(term);
 
+    const observer = new ResizeObserver(() => fitAddon.fit());
+    observer.observe(containerRef.current);
+
     return () => {
+      observer.disconnect();
       term.dispose();
       termRef.current = null;
     };
   }, []);
 
-  return <div ref={containerRef} className="w-full h-full" />;
+  return (
+    <div className = "flex flex-col w-full h-full" >
+      <div ref={containerRef} className="w-full h-full" />
+    </div>
+
+  );
 }

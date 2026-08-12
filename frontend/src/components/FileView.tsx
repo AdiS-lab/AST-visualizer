@@ -26,7 +26,7 @@ export function FileView() {
         onChange={(e) => setContent(e.target.value)}
         spellCheck={false}
         className="flex-1 resize-none bg-white text-gray-900 font-mono text-sm p-2 border border-gray-300 rounded outline-none focus:border-gray-500"
-        placeholder="Write your code here..."
+        placeholder= {`print "hello world";` }
       />
     </div>
   );

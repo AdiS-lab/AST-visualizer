@@ -6,3 +6,4 @@ export { ErrorText } from "./errorText";
 export { Field, FormLayout } from "./field";
 export { Tab } from "./tab";
 export { Panel } from "./panel";
+export { ExternalLink } from "./link";

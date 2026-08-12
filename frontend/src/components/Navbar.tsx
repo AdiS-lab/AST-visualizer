@@ -7,7 +7,7 @@ export function Navbar() {
         <Link to="/" className="text-xl font-light text-neutral-900 no-underline hover:text-neutral-600 transition-colors">
           Home
         </Link>
-        <Link to="/ast" className="text-xl font-light text-neutral-900 no-underline hover:text-neutral-600 transition-colors">
+        <Link to="/ast" className="text-xl font-light text-neutral-900 no-underline hover:text-neutral-600 transition-colors" style={{ fontFamily: "'Source Serif 4', serif" }}>
           AST
         </Link>
       </div>
