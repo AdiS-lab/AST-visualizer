@@ -5,7 +5,7 @@ import { Ast } from "./pages/Ast";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/AST-visualizer">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
