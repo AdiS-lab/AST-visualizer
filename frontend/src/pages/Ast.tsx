@@ -35,8 +35,12 @@ export function Ast() {
               AST
             </Tab>
           </div>
-          <div className="flex-1 min-h-0">
-            {tab === "ast" ? <AstCanvas /> : <FileView />}
+
+          <div className={`flex-1 min-h-0 ${tab === "ast" ? "" : "hidden"}`}>
+            <AstCanvas />
+          </div>
+          <div className={`flex-1 min-h-0 ${tab === "file" ? "" : "hidden"}`}>
+            <FileView />
           </div>
         </Panel>
       </main>

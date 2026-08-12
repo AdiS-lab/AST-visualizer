@@ -1,6 +1,7 @@
 use crate::Interpreter;
 use crate::types::*;
-use crate::{write_to_screen };
+use crate::parser::parse;
+use crate::{write_to_screen, clear_canvas};
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -25,6 +26,8 @@ pub fn execute(list: Vec<Declr>, interpreter: &mut Interpreter) -> Result<Lit, E
 pub fn execute_stmt(stmt: Stmt, interpreter: &mut Interpreter) -> Result<Lit, ErrorHandler> {
     match stmt{
         Stmt::Print(expr) => {
+            clear_canvas();
+            parse(expr.clone(), 350, 40, 300);
             let val: Lit = interpreter.evaluate(expr)?;
             // log("[PRINT STATEMENT BELOW]");
             write_to_screen(format!("{}\n", val));

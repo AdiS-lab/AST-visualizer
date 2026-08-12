@@ -18,11 +18,11 @@ extern "C" {
     fn write_to_screen(S: String);
     fn clear_screen();
     fn draw_node(x: i32, y: i32, label: &str);
+    fn draw_line(x1: i32, y1: i32, x2: i32, y2: i32);
     fn clear_canvas();
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
-    
     #[wasm_bindgen(js_namespace = console)]
     fn error(s: &str);
 }

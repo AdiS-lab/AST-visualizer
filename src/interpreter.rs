@@ -1,7 +1,6 @@
 use crate::helpers::{parse_number,parse_string, unwrap_lit_ref_cell, wrap_lit_ref_cell};
 use crate::statements::{execute_stmt, new_scope};
 use crate::types::{Arr, Env, ErrorHandler, Expr, Lit, Val, default};
-use crate::parser::{parse};
 use crate::{write_to_screen, clear_screen};
  
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -12,12 +11,12 @@ use std::io::{self, Write};
 
 pub struct Interpreter {
     pub scope: Vec<Env>,
+    // pub coords: HashMap<&str, i32>
 }
 
 impl Interpreter {
     pub fn evaluate(&mut self, expr: Expr) -> Result<Lit, ErrorHandler> {
-        // log("made it inside interpreter");
-        parse(expr.clone(), 100, 100);
+        // log("made it inside interpreter")
 
         match expr {
             Expr::Literal(lit) => {

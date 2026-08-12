@@ -11,16 +11,17 @@ export function AstCanvas() {
     if (!container || !canvas) return;
 
     if (canvasManager.element !== canvas) {
+      console.log("attached canvas");
       canvasManager.attach(canvas);
     }
-
-    console.log(canvasRef.current?.children);
-    console.log(canvasRef.current)
-
+    
     const ro = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
-      canvas.width = width;
-      canvas.height = height;
+      if (width > 0 && height > 0) {
+        canvas.width = width;
+        canvas.height = height;
+        canvasManager.redraw();
+      }
     });
 
     ro.observe(container);
@@ -28,8 +29,8 @@ export function AstCanvas() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full h-full bg-[#1a1a1e]">
-      <canvas ref={canvasRef} className="block w-full h-full" />
+    <div ref={containerRef} className="w-full h-full bg-[#1a1a1e] overflow-auto">
+      <canvas ref={canvasRef} width={800} height={600} className="block min-w-full min-h-full" />
     </div>
   );
 }

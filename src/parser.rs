@@ -1,5 +1,5 @@
 use crate::types::*;
-use crate::{draw_node, log};
+use crate::{draw_node, draw_line, log};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -410,57 +410,78 @@ impl Parser {
 }
 
 
-pub fn parse(val: Expr, x: i32, y: i32)  -> String {
-    const X_DIST: i32= 2;
-    const Y_DIST: i32 = 3;
-    log("made it inside parse great!");
-    
+const Y_DIST: i32 = 70;
+
+pub fn parse(val: Expr, x: i32, y: i32, spread: i32) -> String {
+    let half = spread / 2;
+
     match val {
         Expr::Literal(lit) => {
-            draw_node(x, y, "literal");
-            log("drew literal, if not working then is a problem with func or state");
-            
             if let Lit::F64(f) = lit {
+                draw_node(x, y, &format!("{}", f));
                 return format!("{:?}", f);
             } else if let Lit::String(s) = lit {
+                draw_node(x, y, &s);
                 return format!("{}", s);
             } else if let Lit::Bool(b) = lit {
+                draw_node(x, y, &format!("{}", b));
                 return format!("{}", b);
             } else if let Lit::Nil = lit {
+                draw_node(x, y, "nil");
                 return "nil".to_string();
             }
         }
         Expr::Binary(l, o, r) => {
-            draw_node(x, y, "binary");
-            return format!("({} {} {})", o, parse(*l, x-X_DIST, y-Y_DIST), parse(*r, x+X_DIST, y-Y_DIST))
+            draw_node(x, y, &o);
+            draw_line(x, y, x - half, y + Y_DIST);
+            draw_line(x, y, x + half, y + Y_DIST);
+            return format!("({} {} {})", o,
+                parse(*l, x - half, y + Y_DIST, half),
+                parse(*r, x + half, y + Y_DIST, half))
         },
         Expr::Unary(l, r) => {
-            draw_node(x, y, "unary");
-            return format!("({} {})", l, parse(*r, x, y-Y_DIST))
+            draw_node(x, y, &l);
+            draw_line(x, y, x, y + Y_DIST);
+            return format!("({} {})", l, parse(*r, x, y + Y_DIST, spread))
         },
         Expr::Grouping(l) => {
-            draw_node(x, y, "grouping");
-            return format!("(group {})", parse(*l, x, y-Y_DIST))
+            draw_node(x, y, "()");
+            draw_line(x, y, x, y + Y_DIST);
+            return format!("(group {})", parse(*l, x, y + Y_DIST, spread))
         },
         Expr::AssignVar(s, expr) => {
-            draw_node(x, y, "assignvar");
-            return format!("({}{})", s, parse(*expr, x, y-Y_DIST))
+            draw_node(x, y, &s);
+            draw_line(x, y, x, y + Y_DIST);
+            return format!("({}{})", s, parse(*expr, x, y + Y_DIST, spread))
         },
         Expr::AssignArr(val, right) => {
-            draw_node(x, y, "assignarr");
-            return format!("{:?} {:?}", parse(*val, x, y -Y_DIST), parse(*right, x, y - Y_DIST*2))
+            draw_node(x, y, "arr = ");
+            draw_line(x, y, x - half, y + Y_DIST);
+            draw_line(x, y, x + half, y + Y_DIST);
+            return format!("{:?} {:?}",
+                parse(*val, x - half, y + Y_DIST, half),
+                parse(*right, x + half, y + Y_DIST, half))
         },
         Expr::Operand(l, o, r) => {
-            draw_node(x, y, "operand");
-            return format!("({} {} {})", o, parse(*l, x-X_DIST, y-Y_DIST), parse(*r, x+X_DIST, y-Y_DIST))
+            draw_node(x, y, &o);
+            draw_line(x, y, x - half, y + Y_DIST);
+            draw_line(x, y, x + half, y + Y_DIST);
+            return format!("({} {} {})", o,
+                parse(*l, x - half, y + Y_DIST, half),
+                parse(*r, x + half, y + Y_DIST, half))
         },
         Expr::Call(id, args) => {
-            draw_node(x, y, "call");
-            return format!("({:?} {:?})", parse(*id, x, y-Y_DIST ), args)
+            draw_node(x, y, "fn invoke");
+            draw_line(x, y, x, y + Y_DIST);
+            return format!("({:?} {:?})", parse(*id, x, y + Y_DIST, spread), args)
         },
-        Expr::Arr(id, index) =>{
+        Expr::Arr(id, index) => {
             draw_node(x, y, "arr");
-            return format!("{} {}", parse(*id, x, y -Y_DIST), parse(*index,  x, y - Y_DIST*2))
+            draw_line(x, y, x - half, y + Y_DIST);
+            draw_line(x, y, x + half, y + Y_DIST);
+            return format!("{} {}",
+                parse(*id, x - half, y + Y_DIST, half),
+                parse(*index, x + half, y + Y_DIST, half))
         },
     };
     return "".to_string();
