@@ -7,7 +7,7 @@ function Description() {
         The goal of this project is to strip away some of the magic
         that surrounds computers. In other words we'll take
         a peek into a few "black boxes" of our 
-        internet world. Technology has been, and will be an
+        internet world. Technology has been, and will continue to  be an
         overbearing presence in our lives. As a result we are tasked with fostering a healthy
         relationship with it, a problem that matters now more than ever.
         I think part of approaching the internet,
@@ -46,7 +46,7 @@ export function Home() {
   <>
     <main className="flex items-center justify-center min-h-screen bg-white pr-20 pl-20 pt-20 border-1">
       <h1 className="text-center text-8xl font-bold text-neutral-900" style={{ fontFamily: "'Source Serif 4', serif" }}>
-        Visualize the Internet
+        Visualize Coding
       </h1>
 
       <div>

@@ -10,14 +10,19 @@ function WriteUp(){
   return (
   <>
     <p>
+      
       Everything inside file contents represents my own interpreted programming language. Tokenizing a file, 
       is exactly how you think it would work. walk through every character and use conditionals to parse 
       words / symbols into an array of tokens. an AST (abstract syntax tree), is built by taking a linear 
       stream of tokens and performing an algorithm which ORDERS each token into a hierarchal like structure. 
-    </p>
-    <br></br>
-    <p>
-      
+      <br /><br />
+      I did not conjure this idea up on my own -   
+      <ExternalLink href="https://craftinginterpreters.com/">crafting interpreters. </ExternalLink>
+      The top left component is a <ExternalLink href="https://xtermjs.org/">plugin terminal </ExternalLink>
+      to the browser. Kind of like a terminal emulator. You can type code into the makeshift editor. and run commands
+      as you would compile a real language on your own machine. Try out animate donut.lox to see something cool, inspiration from
+      <ExternalLink href="https://www.a1k0n.net/2011/07/20/donut-math.html"> here </ExternalLink>. 
+      <br /><br />
       take the expression 1 + 2.
       it is represented by the tokens: [1][+][2]
       these tokens are then fed into a parser.
@@ -47,12 +52,6 @@ function WriteUp(){
       or turn it into bytecode and stream into a virtual machine -- a software REPRESENTATION of a CPU -- which 
       will eat bytecode and compiles it to machine native code. amazing!!
       <br /><br />
-      I did not conjure this idea up on my own -   
-      <ExternalLink href="https://craftinginterpreters.com/">crafting interpreters. </ExternalLink>
-      The top left component is a <ExternalLink href="https://xtermjs.org/">plugin terminal </ExternalLink>
-      to the browser. Kind of like a terminal emulator. You can type code into the makeshift editor. and run commands
-      as you would compile a real language on your own machine. Try out animate donut.lox to see something cool, inspiration from
-      <ExternalLink href="https://www.a1k0n.net/2011/07/20/donut-math.html"> here </ExternalLink>. 
     </p>
     </>
   )
